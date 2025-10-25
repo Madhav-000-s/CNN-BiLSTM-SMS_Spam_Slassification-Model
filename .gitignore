@@ -1,0 +1,111 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Models and Training Artifacts
+models/*.h5
+models/*.keras
+models/*.ckpt
+models/*.pb
+models/*.pickle
+models/*.pkl
+models/*.png
+models/*.jpg
+models/*.jpeg
+models/logs/
+models/checkpoints/
+*.h5
+*.keras
+*.ckpt
+
+# Data files (keep structure, ignore large files)
+data/processed/
+data/raw/*.csv
+data/raw/*.txt
+data/raw/*.tsv
+data/raw/*.json
+data/raw/*.parquet
+# But keep placeholder files to preserve directory structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.spyderproject
+.spyproject
+.ropeproject
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Logs and outputs
+*.log
+*.out
+*.err
+logs/
+output/
+
+# TensorBoard
+runs/
+tb_logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~.nib
