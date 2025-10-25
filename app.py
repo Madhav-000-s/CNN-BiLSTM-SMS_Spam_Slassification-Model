@@ -3,6 +3,7 @@ Improved Streamlit app for SMS spam detection.
 
 Works with both original and improved models.
 Automatically detects which model is available.
+Includes batch TXT file upload functionality.
 """
 
 import streamlit as st
@@ -12,6 +13,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import pickle
 import re
 import os
+import pandas as pd
 
 # Page configuration
 st.set_page_config(
@@ -263,12 +265,13 @@ def main():
     with st.spinner("Loading model..."):
         model, tokenizer, model_name = load_model_and_tokenizer()
 
-    # Display model info
-    st.markdown(f"""
-        <div class="model-info">
-            ℹ️ Using model: <strong>{model_name}</strong>
-        </div>
-    """, unsafe_allow_html=True)
+    # Display model info - REMOVED AS REQUESTED
+    # You can re-enable this by uncommenting the block below
+    # st.markdown(f"""
+    #     <div class="model-info">
+    #         ℹ️ Using model: <strong>{model_name}</strong>
+    #     </div>
+    # """, unsafe_allow_html=True)
 
     # Input section
     st.subheader("Enter SMS Message")
@@ -320,6 +323,47 @@ def main():
                         </div>
                     """, unsafe_allow_html=True)
 
+    # --- NEW: Batch classification section ---
+    st.markdown("---")
+    st.subheader("Batch Classification (Upload .txt file)")
+    uploaded_file = st.file_uploader(
+        "Upload a .txt file with one SMS message per line.",
+        type=["txt"]
+    )
+
+    if uploaded_file is not None:
+        try:
+            # Read file as string
+            string_data = uploaded_file.getvalue().decode("utf-8")
+            messages = [line.strip() for line in string_data.splitlines() if line.strip()]
+
+            if not messages:
+                st.warning("The uploaded file is empty or contains only whitespace.")
+            else:
+                with st.spinner(f"Classifying {len(messages)} messages..."):
+                    results = []
+                    for msg in messages:
+                        prediction, probability = predict_spam(model, tokenizer, msg, model_name)
+                        confidence = probability if prediction == 'Spam' else (1 - probability)
+                        confidence_percent = f"{confidence * 100:.2f}%"
+                        results.append({
+                            "Message": msg,
+                            "Prediction": prediction,
+                            "Confidence": confidence_percent
+                        })
+
+                    st.success(f"Successfully classified {len(messages)} messages.")
+                    
+                    # Display results in a dataframe
+                    df_results = pd.DataFrame(results)
+                    st.dataframe(df_results, use_container_width=True)
+
+        except Exception as e:
+            st.error(f"Error processing file: {e}")
+            st.error("Please ensure the file is a valid .txt file encoded in UTF-8.")
+    # --- End of new section ---
+
+
     # Examples section
     st.markdown("---")
     st.subheader("Example Messages")
@@ -355,7 +399,7 @@ def main():
     st.markdown("""
         <div style='text-align: center; color: #666; font-size: 14px;'>
             <p>Built with TensorFlow and Streamlit | Advanced Deep Learning Architecture</p>
-            <p>Model: CNN-BiLSTM with Self-Attention Mechanism</p>
+            <p>Model: {model_name}</p>
         </div>
     """, unsafe_allow_html=True)
 
