@@ -61,7 +61,7 @@ models/checkpoints/
 
 # Data files (keep structure, ignore large files)
 data/processed/
-data/raw/*.csv
+# data/raw/*.csv
 data/raw/*.txt
 data/raw/*.tsv
 data/raw/*.json
@@ -109,3 +109,5 @@ tb_logs/
 *.bak
 *.swp
 *~.nib
+
+CLAUDE.md
